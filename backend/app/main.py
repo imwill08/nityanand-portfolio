@@ -1,15 +1,29 @@
-﻿from fastapi import FastAPI
+from fastapi import FastAPI
 from app.database import test_connection, create_indexes
 from contextlib import asynccontextmanager
 import asyncio
 import httpx
 
-#Fetch FRONTEND_URL from env
+# CORS origins setup (both production Vercel & local development)
 import os
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 load_dotenv()
-FRONTEND_URL = os.getenv("FRONTEND_URL")
+
+allowed_origins = [
+    "https://nityanand08.vercel.app",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+
+frontend_env = os.getenv("FRONTEND_URL")
+if frontend_env:
+    for url in frontend_env.split(","):
+        cleaned = url.strip().rstrip("/")
+        if cleaned and cleaned not in allowed_origins:
+            allowed_origins.append(cleaned)
 
 from app.routes.skills import public_router as skills_public
 from app.routes.skills import admin_router as skills_admin
@@ -79,9 +93,9 @@ async def lifespan(app: FastAPI):
     ping_task.cancel()
 
 app = FastAPI(lifespan=lifespan)
-app.add_middleware( # Add CORS or other middleware if needed
+app.add_middleware(
     CORSMiddleware,
-    allow_origins=[FRONTEND_URL, "http://localhost:3000", "http://127.0.0.1:3000"],  # Adjust this in production
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

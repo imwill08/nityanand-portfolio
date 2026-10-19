@@ -167,8 +167,7 @@ Add all keys in your local `.env` to Render's **Environment Variables** panel:
 - `GEMINI_API_KEY`
 - `SECRET_KEY`
 - `HF_ACCESS_TOKEN`
-- `HF_MODEL_NAME` (e.g. `BAAI/bge-small-en-v1.5`)
-- `FRONTEND_URL` -> Set this to your production Vercel URL (e.g., `https://your-portfolio.vercel.app`) to handle CORS correctly!
+- `FRONTEND_URL` -> Set this to your production Vercel URL (`https://nityanand08.vercel.app`). Note: Localhost is also whitelisted by default so local dev always works!
 
 ### 3. Preventing Cold Starts (Keep Warm Endpoint)
 If you deploy on a free Render tier, your service will spin down after 15 minutes of inactivity.
