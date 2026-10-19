@@ -1,6 +1,6 @@
-# 🚀 Gaurav's Portfolio Backend (FastAPI + MongoDB RAG)
+# 🚀Nityanand's Portfolio Backend (FastAPI + MongoDB RAG)
 
-Welcome to the backend service of Gaurav's Developer Portfolio. This is a high-performance web service built with **FastAPI**, **MongoDB** (using the asynchronous **Motor** driver), and integrated with the **Gemini 2.5 Flash LLM** and a **Hugging Face / local Vector Search RAG system** to power the AI assistant (Yuki-Chan).
+Welcome to the backend service of Nityanand's Developer Portfolio. This is a high-performance web service built with **FastAPI**, **MongoDB** (using the asynchronous **Motor** driver), and integrated with the **Gemini 2.5 Flash LLM** and a **Hugging Face / local Vector Search RAG system** to power the AI assistant (Yuki-Chan).
 
 ---
 

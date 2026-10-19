@@ -44,7 +44,7 @@ export default function TimelinePage() {
                                 <div className="flex-shrink-0 w-20 h-20 bg-black/40 rounded-xl border border-white/10 flex items-center justify-center p-2 hidden sm:flex">
                                     {entry.logo_path ? (
                                         <img
-                                            src={entry.logo_path.startsWith('http') || entry.logo_path.startsWith('blob:') ? entry.logo_path : `${process.env.NEXT_PUBLIC_API_BASE_URL || ''}/static${entry.logo_path.startsWith('/') ? '' : '/'}${entry.logo_path}`}
+                                            src={entry.logo_path.startsWith('http') || entry.logo_path.startsWith('blob:') ? entry.logo_path : `${(process.env.NEXT_PUBLIC_API_BASE_URL || '').replace(/\/+$/, '')}/static${entry.logo_path.startsWith('/') ? '' : '/'}${entry.logo_path}`}
                                             alt={entry.header}
                                             className="w-full h-full object-contain filter drop-shadow-md"
                                         />
