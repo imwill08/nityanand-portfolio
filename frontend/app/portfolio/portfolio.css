@@ -13,9 +13,11 @@
     --bg-raised: #24201c;
     --bg-raised-2: #2c2722;
 
-    --accent: #d97757;          /* terracotta */
+    --accent: #d97757;
+    /* terracotta */
     --accent-soft: rgba(217, 119, 87, 0.12);
-    --accent2: #c9a26b;         /* muted sand */
+    --accent2: #c9a26b;
+    /* muted sand */
     --accent3: #c9a26b;
     --accent4: #d97757;
 
@@ -241,5 +243,274 @@
 
     .glass-card {
         padding: 1.25rem;
+    }
+}
+
+/* ========================================================
+   Full-Screen Time-Travel Warp & Relativistic Disappearance
+   ======================================================== */
+.time-travel-stage {
+    perspective: 1600px;
+    perspective-origin: 50% 40%;
+    transform-style: preserve-3d;
+    width: 100%;
+    min-height: 100%;
+    position: relative;
+    overflow-x: clip;
+}
+
+.time-travel-page {
+    width: 100%;
+    min-height: 100%;
+    transform-style: preserve-3d;
+    will-change: transform, opacity, filter;
+    backface-visibility: hidden;
+}
+
+/* Full-Screen Time Travel Speed Lines Tunnel */
+.time-travel-tunnel-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    overflow: hidden;
+}
+
+.time-tunnel-backdrop {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 50%, rgba(217, 119, 87, 0.22) 0%, rgba(15, 13, 11, 0.6) 65%, transparent 100%);
+    opacity: 0;
+    animation: tunnelBackdrop 0.62s ease-out forwards;
+}
+
+.time-stream-curtain {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+}
+
+.stream-line {
+    position: absolute;
+    left: -20%;
+    border-radius: 999px;
+    will-change: transform, opacity;
+}
+
+/* Color variations */
+.stream-line.color-accent {
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(217, 119, 87, 0.15) 15%,
+            #d97757 50%,
+            rgba(217, 119, 87, 0.9) 80%,
+            transparent 100%);
+    box-shadow: 0 0 16px 2px #d97757, 0 0 35px 6px rgba(217, 119, 87, 0.45);
+}
+
+.stream-line.color-gold {
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(201, 162, 107, 0.15) 15%,
+            #c9a26b 50%,
+            rgba(201, 162, 107, 0.9) 80%,
+            transparent 100%);
+    box-shadow: 0 0 14px 2px #c9a26b, 0 0 28px 4px rgba(201, 162, 107, 0.35);
+}
+
+.stream-line.color-white {
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.25) 20%,
+            #faf6ee 50%,
+            rgba(255, 255, 255, 0.9) 75%,
+            transparent 100%);
+    box-shadow: 0 0 20px 3px rgba(250, 246, 238, 0.9), 0 0 45px 8px rgba(217, 119, 87, 0.6);
+}
+
+/* Forward Speed Lines Animation */
+.dir-forward .stream-line {
+    animation: streamForward linear forwards;
+}
+
+/* Backward Speed Lines Animation */
+.dir-backward .stream-line {
+    animation: streamBackward linear forwards;
+}
+
+@keyframes streamForward {
+    0% {
+        transform: translate3d(-100%, 0, 0) scaleX(0.08);
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 1;
+    }
+
+    50% {
+        transform: translate3d(10%, 0, 0) scaleX(1.4);
+        opacity: 1;
+    }
+
+    85% {
+        opacity: 0.9;
+    }
+
+    100% {
+        transform: translate3d(140%, 0, 0) scaleX(0.15);
+        opacity: 0;
+    }
+}
+
+@keyframes streamBackward {
+    0% {
+        transform: translate3d(140%, 0, 0) scaleX(0.08);
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 1;
+    }
+
+    50% {
+        transform: translate3d(-10%, 0, 0) scaleX(1.4);
+        opacity: 1;
+    }
+
+    85% {
+        opacity: 0.9;
+    }
+
+    100% {
+        transform: translate3d(-100%, 0, 0) scaleX(0.15);
+        opacity: 0;
+    }
+}
+
+/* Quantum Central Rift Singularity */
+.time-quantum-rift {
+    position: absolute;
+    top: 50%;
+    left: -10%;
+    width: 120%;
+    height: 3px;
+    background: linear-gradient(90deg, transparent 0%, var(--accent) 30%, #fff 50%, var(--accent) 70%, transparent 100%);
+    box-shadow: 0 0 35px 6px var(--accent), 0 0 90px 18px rgba(217, 119, 87, 0.55);
+    filter: blur(1px);
+    opacity: 0;
+    transform: translateY(-50%) scaleX(0.1);
+}
+
+.rift-forward {
+    animation: riftForward 0.58s cubic-bezier(0.16, 0.84, 0.3, 1) forwards;
+}
+
+.rift-backward {
+    animation: riftBackward 0.58s cubic-bezier(0.16, 0.84, 0.3, 1) forwards;
+}
+
+@keyframes riftForward {
+    0% {
+        opacity: 0;
+        transform: translateY(-50%) scaleX(0.05) translateX(-20%);
+    }
+
+    35% {
+        opacity: 1;
+        transform: translateY(-50%) scaleX(1.1) translateX(0%);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-50%) scaleX(1.5) translateX(30%);
+    }
+}
+
+@keyframes riftBackward {
+    0% {
+        opacity: 0;
+        transform: translateY(-50%) scaleX(0.05) translateX(20%);
+    }
+
+    35% {
+        opacity: 1;
+        transform: translateY(-50%) scaleX(1.1) translateX(0%);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-50%) scaleX(1.5) translateX(-30%);
+    }
+}
+
+/* Ambient Speed Sweep Overlay */
+.time-warp-sweep {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(217, 119, 87, 0.08) 35%,
+            rgba(250, 246, 238, 0.12) 50%,
+            rgba(217, 119, 87, 0.08) 65%,
+            transparent 100%);
+    opacity: 0;
+}
+
+.sweep-forward {
+    animation: sweepForward 0.55s ease-out forwards;
+}
+
+.sweep-backward {
+    animation: sweepBackward 0.55s ease-out forwards;
+}
+
+@keyframes sweepForward {
+    0% {
+        opacity: 0;
+        transform: translateX(-60%);
+    }
+
+    30% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(60%);
+    }
+}
+
+@keyframes sweepBackward {
+    0% {
+        opacity: 0;
+        transform: translateX(60%);
+    }
+
+    30% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(-60%);
+    }
+}
+
+@keyframes tunnelBackdrop {
+    0% {
+        opacity: 0;
+    }
+
+    30% {
+        opacity: 0.95;
+    }
+
+    70% {
+        opacity: 0.8;
+    }
+
+    100% {
+        opacity: 0;
     }
 }

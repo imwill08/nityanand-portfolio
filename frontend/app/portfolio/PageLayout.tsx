@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { AnimatePresence, motion, type Variants } from "framer-motion";
 import Navigation from "./Navigation";
+import TimeTravelTunnel from "./components/TimeTravelTunnel";
 import HomePage from "./pages/HomePage";
 import TimelinePage from "./pages/TimelinePage";
 import SkillsPage from "./pages/SkillsPage";
@@ -24,13 +26,70 @@ const PAGE_TRANSITIONS: Record<Page, Partial<Record<Direction, Page>>> = {
     bottom: { up: "center", down: "top", left: "left", right: "right" },
 };
 
+const PAGE_ORDER: Record<Page, number> = {
+    center: 0,  // Home
+    left: 1,    // Timeline
+    bottom: 2,  // Skills
+    right: 3,   // Projects
+    top: 4,     // Admin
+};
+
+// ── Time-Travel Warp 3D Variants (Whole Page & Panels Travel & Disappear) ─────
+const timeTravelVariants: Variants = {
+    initial: (dir: number) => ({
+        x: dir > 0 ? "85vw" : "-85vw",
+        scaleX: 1.55,
+        scaleY: 0.8,
+        skewX: dir > 0 ? 15 : -15,
+        rotateY: dir > 0 ? 24 : -24,
+        opacity: 0,
+        filter: "blur(20px) brightness(1.7)",
+        transformOrigin: dir > 0 ? "left center" : "right center",
+    }),
+    animate: {
+        x: 0,
+        scaleX: 1,
+        scaleY: 1,
+        skewX: 0,
+        rotateY: 0,
+        opacity: 1,
+        filter: "blur(0px) brightness(1)",
+        transformOrigin: "center center",
+        transition: {
+            duration: 0.54,
+            ease: [0.14, 1, 0.28, 1] as const, // hyperspace arrival deceleration
+        },
+    },
+    exit: (dir: number) => ({
+        x: dir > 0 ? "-85vw" : "85vw",
+        scaleX: 1.55,
+        scaleY: 0.8,
+        skewX: dir > 0 ? -15 : 15,
+        rotateY: dir > 0 ? -24 : 24,
+        opacity: 0,
+        filter: "blur(20px) brightness(1.7)",
+        transformOrigin: dir > 0 ? "right center" : "left center",
+        transition: {
+            duration: 0.42,
+            ease: [0.42, 0, 0.18, 1] as const, // explosive warp acceleration into the time lines
+        },
+    }),
+};
+
 export default function PageLayout() {
     const [activePage, setActivePage] = useState<Page>("center");
+    const [direction, setDirection] = useState<number>(1);
+    const [warpKey, setWarpKey] = useState<number>(0);
 
     /** Navigate by page name (center/left/right/top/bottom) */
     const navigateTo = useCallback(
-        (target: Page) => {
+        (target: Page, explicitDir?: number) => {
             if (target === activePage) return;
+            const dir = explicitDir !== undefined
+                ? explicitDir
+                : (PAGE_ORDER[target] >= PAGE_ORDER[activePage] ? 1 : -1);
+            setDirection(dir);
+            setWarpKey((k) => k + 1);
             setActivePage(target);
         },
         [activePage]
@@ -40,7 +99,10 @@ export default function PageLayout() {
     const navigateDir = useCallback(
         (dir: Direction) => {
             const target = PAGE_TRANSITIONS[activePage]?.[dir];
-            if (target) navigateTo(target);
+            if (target) {
+                const dirVal = (dir === "left" || dir === "up") ? -1 : 1;
+                navigateTo(target, dirVal);
+            }
         },
         [activePage, navigateTo]
     );
@@ -77,7 +139,7 @@ export default function PageLayout() {
 
     const renderPage = () => {
         switch (activePage) {
-            case "center": return <HomePage onNavigate={navigateTo} />;
+            case "center": return <HomePage onNavigate={(p) => navigateTo(p)} />;
             case "left": return <TimelinePage />;
             case "right": return <ProjectsPage />;
             case "top": return <AdminPage />;
@@ -94,10 +156,30 @@ export default function PageLayout() {
                 onNavigateDir={navigateDir}
             />
 
-            {/* Scrollable page content */}
+            {/* Full-Screen Time Travel Speed Lines & Quantum Rift Tunnel */}
+            {warpKey > 0 && (
+                <TimeTravelTunnel key={warpKey} direction={direction} />
+            )}
+
+            {/* Scrollable page content with Relativistic Time-Travel Warp */}
             <div className="portfolio-content" id="portfolio-scroll">
-                {renderPage()}
+                <div className="time-travel-stage">
+                    <AnimatePresence mode="wait" custom={direction}>
+                        <motion.div
+                            key={activePage}
+                            custom={direction}
+                            variants={timeTravelVariants}
+                            initial="initial"
+                            animate="animate"
+                            exit="exit"
+                            className="time-travel-page"
+                        >
+                            {renderPage()}
+                        </motion.div>
+                    </AnimatePresence>
+                </div>
             </div>
         </div>
     );
 }
+

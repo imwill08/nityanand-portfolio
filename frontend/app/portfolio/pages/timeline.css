@@ -1,23 +1,292 @@
-/* Timeline Page — warm editorial */
+/* Timeline Page — Dynamic Temporal Travel Towards Past */
 
+.timeline-page {
+    position: relative;
+}
+
+/* ── Temporal Drift Status Bar ── */
+.timeline-drift-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.85rem 1.25rem;
+    margin: 1.5rem 0 2.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-family: var(--mono);
+    font-size: 0.76rem;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+}
+
+.drift-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    color: var(--text-dim);
+}
+
+.drift-beacon {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #00f5d4;
+    box-shadow: 0 0 10px 2px rgba(0, 245, 212, 0.7);
+    animation: beaconBlink 2s ease-in-out infinite;
+}
+
+.drift-icon {
+    color: var(--accent);
+}
+
+.drift-stats {
+    display: flex;
+    align-items: center;
+}
+
+.drift-chip {
+    padding: 0.2rem 0.55rem;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--accent);
+    font-weight: 500;
+}
+
+@keyframes beaconBlink {
+    0%, 100% { opacity: 0.3; transform: scale(0.9); }
+    50% { opacity: 1; transform: scale(1.3); }
+}
+
+/* ── Timeline Stream Container & Spine Conduit ── */
+.timeline-stream-container {
+    position: relative;
+    padding-bottom: 2rem;
+}
+
+.timeline-spine-conduit {
+    position: absolute;
+    /* Center of 56px logo column: 195px meta col + 1.75rem gap + 28px */
+    left: calc(195px + 1.75rem + 28px - 1px);
+    top: 1rem;
+    bottom: 2rem;
+    width: 2px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.timeline-spine-track {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, 
+        rgba(0, 245, 212, 0.4) 0%, 
+        var(--border-strong) 15%, 
+        var(--border) 80%, 
+        transparent 100%
+    );
+}
+
+/* Filled active trail from present down to current scroll position */
+.timeline-spine-active-trail {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2px;
+    background: linear-gradient(180deg, 
+        rgba(0, 245, 212, 0.95) 0%, 
+        var(--accent) 70%, 
+        #ffffff 100%
+    );
+    box-shadow: 0 0 14px 2px var(--accent), 0 0 28px 4px rgba(0, 245, 212, 0.4);
+    pointer-events: none;
+    transition: height 0.06s ease-out;
+}
+
+/* Scroll-Driven Light Beam Capsule */
+.timeline-scroll-beam {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 28px;
+    height: 28px;
+    pointer-events: none;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: top 0.06s ease-out;
+}
+
+.beam-orb {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #ffffff;
+    box-shadow: 0 0 12px 3px #ffffff, 0 0 24px 5px #00f5d4, 0 0 45px 10px #ff9f43;
+    z-index: 2;
+}
+
+.beam-corona {
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(0, 245, 212, 0.85);
+    box-shadow: 0 0 15px 2px rgba(0, 245, 212, 0.6);
+    animation: beamCoronaPulse 2.2s ease-in-out infinite;
+}
+
+.beam-flare {
+    position: absolute;
+    width: 72px;
+    height: 2.5px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        #00f5d4 30%, 
+        #ffffff 50%, 
+        #ff9f43 70%, 
+        transparent 100%
+    );
+    box-shadow: 0 0 16px 2px #00f5d4;
+    filter: blur(0.5px);
+}
+
+@keyframes beamCoronaPulse {
+    0%, 100% { transform: scale(0.9); opacity: 0.6; }
+    50% { transform: scale(1.35); opacity: 1; }
+}
+
+/* ── Timeline List & Items ── */
 .timeline-list {
     display: flex;
     flex-direction: column;
-    border-top: 1px solid var(--border);
+    position: relative;
+    z-index: 2;
 }
 
 .timeline-item.glass-card {
     position: relative;
-    padding: 2rem 0;
+    padding: 2.25rem 0;
     background: transparent;
     border: none;
     border-bottom: 1px solid var(--border);
     border-radius: 0;
+    transition: transform var(--transition), border-color var(--transition);
 }
 
-/* dots are not used in this layout */
-.timeline-dot {
-    display: none;
+.timeline-item.glass-card:hover {
+    transform: translateX(4px);
+    border-bottom-color: var(--border-strong);
+}
+
+/* Active milestone currently focused by the scroll beam */
+.timeline-item.glass-card.is-beam-active {
+    border-bottom-color: var(--border-strong);
+}
+
+.timeline-item.glass-card.is-beam-active .timeline-logo {
+    border-color: rgba(0, 245, 212, 0.65);
+    box-shadow: 0 0 22px rgba(0, 245, 212, 0.25), 0 0 40px rgba(255, 159, 67, 0.15);
+    transform: scale(1.05);
+}
+
+.timeline-item.glass-card.is-beam-active .timeline-connector-ring {
+    border-color: #00f5d4;
+    background: #00f5d4;
+    box-shadow: 0 0 12px #00f5d4;
+}
+
+.timeline-item.glass-card.is-beam-active .timeline-dates {
+    color: var(--text-bright);
+}
+
+.timeline-row {
+    display: grid;
+    grid-template-columns: 195px 56px 1fr;
+    gap: 1.75rem;
+    align-items: start;
+}
+
+/* ── Meta Column: Era Badge & Dates ── */
+.timeline-meta-col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-top: 0.2rem;
+}
+
+.timeline-era-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    padding: 0.22rem 0.55rem;
+    border-radius: var(--radius-sm);
+    width: fit-content;
+    text-transform: uppercase;
+}
+
+.era-present {
+    background: rgba(0, 245, 212, 0.1);
+    color: #00f5d4;
+    border: 1px solid rgba(0, 245, 212, 0.35);
+    box-shadow: 0 0 12px rgba(0, 245, 212, 0.2);
+}
+
+.era-career {
+    background: rgba(217, 119, 87, 0.1);
+    color: var(--accent);
+    border: 1px solid rgba(217, 119, 87, 0.25);
+}
+
+.era-intern {
+    background: rgba(201, 162, 107, 0.12);
+    color: var(--accent2);
+    border: 1px solid rgba(201, 162, 107, 0.28);
+}
+
+.era-academic {
+    background: rgba(144, 224, 239, 0.1);
+    color: #90e0ef;
+    border: 1px solid rgba(144, 224, 239, 0.25);
+}
+
+.live-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #00f5d4;
+    box-shadow: 0 0 8px #00f5d4;
+    animation: livePulse 1.6s ease-in-out infinite;
+}
+
+@keyframes livePulse {
+    0%, 100% { opacity: 0.4; transform: scale(0.85); }
+    50% { opacity: 1; transform: scale(1.3); }
+}
+
+.era-icon {
+    flex-shrink: 0;
+}
+
+.timeline-dates {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+    letter-spacing: 0.02em;
+}
+
+/* ── Node Wrapper & Company Logo ── */
+.timeline-node-wrapper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .timeline-logo {
@@ -31,6 +300,20 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    position: relative;
+    z-index: 2;
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.timeline-item.glass-card:hover .timeline-logo {
+    transform: scale(1.06);
+    border-color: var(--accent);
+    box-shadow: 0 0 16px rgba(217, 119, 87, 0.25);
+}
+
+.timeline-logo.is-live {
+    border-color: rgba(0, 245, 212, 0.5);
+    box-shadow: 0 0 20px rgba(0, 245, 212, 0.2);
 }
 
 .timeline-logo img {
@@ -42,22 +325,33 @@
 
 .timeline-logo span {
     font-family: var(--serif);
-    font-size: 1.3rem;
+    font-size: 1.35rem;
     color: var(--text-dim);
 }
 
-.timeline-row {
-    display: grid;
-    grid-template-columns: 180px 56px 1fr;
-    gap: 1.75rem;
-    align-items: start;
+/* Center connector ring */
+.timeline-connector-ring {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--border-strong);
+    bottom: -1.75rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    pointer-events: none;
 }
 
-.timeline-dates {
-    font-family: var(--mono);
-    font-size: 0.78rem;
-    color: var(--text-muted);
-    padding-top: 0.35rem;
+/* ── Content Column ── */
+.timeline-content-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.timeline-header-wrap {
+    margin-bottom: 0.65rem;
 }
 
 .timeline-title {
@@ -66,38 +360,125 @@
     font-weight: 400;
     letter-spacing: -0.01em;
     color: var(--text-bright);
-    margin: 0 0 0.3rem;
+    margin: 0 0 0.35rem;
     line-height: 1.25;
+    transition: color var(--transition);
+}
+
+.timeline-item.glass-card:hover .timeline-title {
+    color: var(--text-bright);
 }
 
 .timeline-org {
     font-size: 0.95rem;
     color: var(--accent);
-    margin: 0 0 0.85rem;
+    margin: 0;
+    font-weight: 500;
+    letter-spacing: 0.01em;
 }
 
 .timeline-desc {
-    font-size: 0.95rem;
+    font-size: 0.94rem;
     color: var(--text-dim);
-    line-height: 1.7;
+    line-height: 1.75;
     margin: 0;
-    max-width: 620px;
+    max-width: 640px;
     white-space: pre-wrap;
 }
 
+/* ── Timeline Terminal Origin Anchor (Bottom) ── */
+.timeline-origin-anchor {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 3.5rem;
+    padding: 1.25rem 1.75rem;
+    background: var(--surface);
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--radius);
+    position: relative;
+    z-index: 2;
+}
+
+.origin-node {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--surface-2);
+    border: 1px solid var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+    box-shadow: 0 0 16px rgba(217, 119, 87, 0.3);
+    flex-shrink: 0;
+}
+
+.origin-icon {
+    animation: originBounce 2s ease-in-out infinite;
+}
+
+@keyframes originBounce {
+    0%, 100% { transform: translateY(-2px); }
+    50% { transform: translateY(2px); }
+}
+
+.origin-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.origin-title {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    color: var(--text-bright);
+    font-weight: 600;
+}
+
+.origin-sub {
+    font-size: 0.86rem;
+    color: var(--text-muted);
+}
+
+/* ── Responsive adjustments ── */
 @media (max-width: 760px) {
-    .timeline-row {
-        grid-template-columns: 44px 1fr;
-        gap: 1rem;
+    .timeline-drift-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.6rem;
     }
 
-    .timeline-dates {
-        grid-column: 1 / -1;
+    .timeline-row {
+        grid-template-columns: 46px 1fr;
+        gap: 1.2rem;
+    }
+
+    .timeline-meta-col {
+        grid-column: 2;
         padding-top: 0;
     }
 
+    .timeline-node-wrapper {
+        grid-column: 1;
+        grid-row: 1 / 3;
+    }
+
+    .timeline-content-col {
+        grid-column: 2;
+    }
+
+    .timeline-spine-conduit {
+        left: 23px;
+    }
+
     .timeline-logo {
-        width: 44px;
-        height: 44px;
+        width: 46px;
+        height: 46px;
+    }
+
+    .timeline-connector-ring {
+        display: none;
     }
 }
