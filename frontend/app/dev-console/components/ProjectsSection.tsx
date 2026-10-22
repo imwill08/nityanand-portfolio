@@ -625,51 +625,52 @@ export default function ProjectsSection({ requireAuth, toast }: Props) {
     return (
         <div>
             <div className="section-header">
-                <h2>🗂 Projects</h2>
+                <h2>Projects</h2>
                 <p>Manage project categories and individual projects.</p>
             </div>
 
             {/* Apply / Submit strip - three button pattern */}
             <div className="action-strip">
                 <span className="action-strip-text">
-                    📋 Edit below. Add to preview, Apply to localStorage, Submit to backend.
+                    Edit below. Add to preview, Apply to localStorage, Submit to backend.
                 </span>
                 <button
                     className="btn btn-warning btn-sm"
                     onClick={applyPreview}
                     disabled={loading}
                 >
-                    ⚡ Apply (Preview)
+                    Apply (Preview)
                 </button>
                 <button
                     className="btn btn-success btn-sm"
                     disabled={loading || totalPending === 0}
                     onClick={() => requireAuth(() => submitAll())}
                 >
-                    {loading ? "Saving…" : `✅ Submit All${totalPending > 0 ? ` (${totalPending} pending)` : ''}`}
+                    {loading ? "Saving…" : `Submit All${totalPending > 0 ? ` (${totalPending} pending)` : ''}`}
                 </button>
             </div>
 
             {/* Pending items indicator */}
             {totalPending > 0 && (
                 <div className="info-message" style={{
-                    padding: '8px 16px',
+                    padding: '10px 16px',
                     marginBottom: '16px',
-                    backgroundColor: '#fef3c7',
-                    borderRadius: '8px',
-                    color: '#92400e'
+                    backgroundColor: 'var(--admin-card)',
+                    border: '1px solid var(--admin-border)',
+                    borderRadius: 'var(--radius-sm, 4px)',
+                    color: 'var(--admin-text-bright)'
                 }}>
-                    ⏳ You have {totalPending} unsaved item{totalPending > 1 ? 's' : ''} in preview.
-                    Click "Apply" to see in portfolio or "Submit All" to save to backend.
+                    You have {totalPending} unsaved item{totalPending > 1 ? 's' : ''} in preview.
+                    Click "Apply" to see in portfolio or "Submit All" to save permanently.
                 </div>
             )}
 
             <div className="tab-bar">
                 <button className={`tab-btn${tab === "categories" ? " active" : ""}`} onClick={() => setTab("categories")}>
-                    📁 Categories ({allCategories.length}) {tempCategories.length > 0 && <span className="badge badge-warning" style={{ marginLeft: '4px' }}>{tempCategories.length} new</span>}
+                    Categories ({allCategories.length}) {tempCategories.length > 0 && <span className="badge badge-yellow" style={{ marginLeft: '4px' }}>{tempCategories.length} new</span>}
                 </button>
                 <button className={`tab-btn${tab === "projects" ? " active" : ""}`} onClick={() => setTab("projects")}>
-                    🚀 Projects ({allProjects.length}) {tempProjects.length > 0 && <span className="badge badge-warning" style={{ marginLeft: '4px' }}>{tempProjects.length} new</span>}
+                    Projects ({allProjects.length}) {tempProjects.length > 0 && <span className="badge badge-yellow" style={{ marginLeft: '4px' }}>{tempProjects.length} new</span>}
                 </button>
             </div>
 

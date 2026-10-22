@@ -157,13 +157,13 @@ export default function ProfileSection({ requireAuth, toast }: Props) {
     return (
         <div>
             <div className="section-header">
-                <h2> Profile</h2>
+                <h2>Profile</h2>
                 <p>Manage your portfolio profile data, about me content, and profile image.</p>
             </div>
 
             {/* Apply / Submit strip */}
             <div className="action-strip">
-                <span className="action-strip-text"> Edit your profile below. Apply previews locally; Submit saves to the backend.</span>
+                <span className="action-strip-text">Edit your profile below. Apply previews locally; Submit saves to the backend.</span>
                 <button className="btn btn-warning btn-sm" onClick={applyChanges}>Apply (Preview)</button>
                 <button className="btn btn-success btn-sm" disabled={loading} onClick={() => requireAuth(submitAll)}>
                     {loading ? "Saving…" : "Submit All"}
@@ -174,7 +174,7 @@ export default function ProfileSection({ requireAuth, toast }: Props) {
             <div className="tab-bar">
                 {(["profile", "aboutme", "image", "password"] as const).map((t) => (
                     <button key={t} className={`tab-btn${tab === t ? " active" : ""}`} onClick={() => setTab(t)}>
-                        {{ profile: "📊 Profile Data", aboutme: "📝 About Me", image: "🖼 Image", password: "🔑 Password" }[t]}
+                        {{ profile: "Profile Data", aboutme: "About Me", image: "Profile Photo", password: "Password" }[t]}
                     </button>
                 ))}
             </div>
@@ -183,25 +183,25 @@ export default function ProfileSection({ requireAuth, toast }: Props) {
             {tab === "profile" && (
                 <div>
                     <div className="card">
-                        <div className="card-title"><span>🔗</span> Links & URLs</div>
+                        <div className="card-title">Links &amp; URLs</div>
                         <div className="form-row">
                             <div className="form-group"><label className="form-label">GitHub URL</label><input className="form-input" placeholder="https://github.com/..." value={data.github_url || ""} onChange={(e) => setData(d => ({ ...d, github_url: e.target.value }))} /></div>
                             <div className="form-group"><label className="form-label">LinkedIn URL</label><input className="form-input" placeholder="https://linkedin.com/in/..." value={data.linkedin_url || ""} onChange={(e) => setData(d => ({ ...d, linkedin_url: e.target.value }))} /></div>
                         </div>
                         <div className="form-row">
                             <div className="form-group"><label className="form-label">Resume (Web Dev)</label><input className="form-input" placeholder="URL to resume" value={data.resume_webdev || ""} onChange={(e) => setData(d => ({ ...d, resume_webdev: e.target.value }))} /></div>
-                            <div className="form-group"><label className="form-label">Resume (AI/ML)</label><input className="form-input" placeholder="URL to resume" value={data.resume_ai_ml || ""} onChange={(e) => setData(d => ({ ...d, resume_ai_ml: e.target.value }))} /></div>
+                            <div className="form-group"><label className="form-label">Resume (Data Science)</label><input className="form-input" placeholder="URL to resume" value={data.resume_ai_ml || ""} onChange={(e) => setData(d => ({ ...d, resume_ai_ml: e.target.value }))} /></div>
                         </div>
                     </div>
 
                     <div className="card">
-                        <div className="card-title"><span>📝</span> Descriptions</div>
+                        <div className="card-title">Descriptions</div>
                         <div className="form-group"><label className="form-label">Description 1</label><textarea className="form-textarea" rows={3} value={data.description1 || ""} onChange={(e) => setData(d => ({ ...d, description1: e.target.value }))} /></div>
                         <div className="form-group"><label className="form-label">Description 2</label><textarea className="form-textarea" rows={3} value={data.description2 || ""} onChange={(e) => setData(d => ({ ...d, description2: e.target.value }))} /></div>
                     </div>
 
                     <div className="card">
-                        <div className="card-title"><span>📞</span> Contact Info</div>
+                        <div className="card-title">Contact Info</div>
                         <div className="form-row-3">
                             <div className="form-group"><label className="form-label">Email</label><input className="form-input" value={data.contact?.email || ""} onChange={(e) => setData(d => ({ ...d, contact: { ...d.contact!, email: e.target.value } }))} /></div>
                             <div className="form-group"><label className="form-label">Phone</label><input className="form-input" value={data.contact?.phone || ""} onChange={(e) => setData(d => ({ ...d, contact: { ...d.contact!, phone: e.target.value } }))} /></div>
@@ -210,7 +210,7 @@ export default function ProfileSection({ requireAuth, toast }: Props) {
                     </div>
 
                     <div className="card">
-                        <div className="card-title"><span>⭐</span> Highlights ({data.highlights.length})</div>
+                        <div className="card-title">Highlights ({data.highlights.length})</div>
                         {data.highlights.map((h, i) => (
                             <div className="dynamic-item" key={i}>
                                 <div className="dynamic-item-fields">
@@ -229,7 +229,7 @@ export default function ProfileSection({ requireAuth, toast }: Props) {
                     </div>
 
                     <div className="card">
-                        <div className="card-title"><span>💼</span> What I Do ({data.what_i_do.length})</div>
+                        <div className="card-title">What I Do ({data.what_i_do.length})</div>
                         {data.what_i_do.map((w, i) => (
                             <div className="dynamic-item" key={i}>
                                 <div className="dynamic-item-fields">
@@ -248,7 +248,7 @@ export default function ProfileSection({ requireAuth, toast }: Props) {
                     </div>
 
                     <div className="card">
-                        <div className="card-title"><span>🧠</span> Soft Skills</div>
+                        <div className="card-title">Soft Skills</div>
                         <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 12 }}>
                             {data.soft_skills.map((s, i) => (
                                 <span key={i} className="badge badge-purple" style={{ gap: 6 }}>
@@ -268,12 +268,12 @@ export default function ProfileSection({ requireAuth, toast }: Props) {
             {/* ── ABOUT ME TAB ── */}
             {tab === "aboutme" && (
                 <div className="card">
-                    <div className="card-title"><span>📝</span> About Me (Markdown)</div>
+                    <div className="card-title">About Me (Markdown)</div>
                     <textarea className="textarea-code" rows={20} value={aboutMe} onChange={(e) => setAboutMe(e.target.value)} placeholder="# About Me&#10;Write your about me in Markdown..." />
                     <div className="btn-group">
-                        <button className="btn btn-warning" onClick={applyChanges}>⚡ Apply</button>
+                        <button className="btn btn-warning" onClick={applyChanges}>Apply</button>
                         <button className="btn btn-success" disabled={loading} onClick={() => requireAuth(submitAll)}>
-                            {loading ? "Saving…" : "✅ Submit All"}
+                            {loading ? "Saving…" : "Submit All"}
                         </button>
                     </div>
                 </div>
@@ -282,12 +282,12 @@ export default function ProfileSection({ requireAuth, toast }: Props) {
             {/* ── IMAGE TAB ── */}
             {tab === "image" && (
                 <div className="card">
-                    <div className="card-title"><span>🖼</span> Profile Image</div>
+                    <div className="card-title">Profile Image</div>
                     <div style={{ display: "flex", alignItems: "flex-start", gap: 20, flexWrap: "wrap" }}>
                         <div>
                             {imageUrl
                                 ? <img src={imageUrl} alt="profile" className="profile-img-preview" />
-                                : <div className="profile-img-placeholder">👤</div>}
+                                : <div className="profile-img-placeholder">Avatar</div>}
                             <div style={{ fontSize: "0.75rem", color: "var(--text-dim)" }}>
                                 {imageInfo.enabled ? <span className="badge badge-green">Enabled</span> : <span className="badge badge-red">Disabled</span>}
                             </div>
@@ -300,7 +300,7 @@ export default function ProfileSection({ requireAuth, toast }: Props) {
                             </div>
                             <div className="btn-group">
                                 {imageInfo.image_url && (
-                                    <button className="btn btn-danger" disabled={loading} onClick={() => requireAuth(deleteImage)}>🗑 Delete Image from Backend</button>
+                                    <button className="btn btn-danger" disabled={loading} onClick={() => requireAuth(deleteImage)}>Delete Image</button>
                                 )}
                             </div>
                         </div>
@@ -311,12 +311,12 @@ export default function ProfileSection({ requireAuth, toast }: Props) {
             {/* ── CHANGE PASSWORD TAB ── */}
             {tab === "password" && (
                 <div className="card">
-                    <div className="card-title"><span>🔑</span> Change Password</div>
+                    <div className="card-title">Change Password</div>
                     <div className="form-group"><label className="form-label">Current Password</label><input className="form-input" type="password" value={curPw} onChange={(e) => setCurPw(e.target.value)} /></div>
                     <div className="form-group"><label className="form-label">New Password</label><input className="form-input" type="password" value={newPw} onChange={(e) => setNewPw(e.target.value)} /></div>
                     <div className="btn-group">
                         <button className="btn btn-primary" disabled={loading} onClick={() => requireAuth(submitChangePassword)}>
-                            {loading ? "Changing…" : "🔒 Change Password"}
+                            {loading ? "Changing…" : "Change Password"}
                         </button>
                     </div>
                 </div>

@@ -57,18 +57,17 @@ export default function WelcomeScreen({ onContinue }: WelcomeScreenProps) {
             <div id="stars3" />
 
             <div id="title">
-                <span className="welcome-label">WELCOME</span>
+                <span className="welcome-label">Nityanand — Portfolio</span>
                 <br />
-                <span className="welcome-greeting">{greeting}</span>
-                <br />
+                <span className="welcome-greeting">{greeting}.</span>
 
-                <div className="button-container" style={{ marginTop: "2rem" }}>
+                <div className="button-container" style={{ marginTop: "2.5rem" }}>
                     <button
                         className={`animated-button${ready ? " ready" : ""}`}
                         onClick={ready ? onContinue : undefined}
                         disabled={!ready}
                     >
-                        {ready ? "Continue" : "Loading…"}
+                        {ready ? "enter →" : "loading…"}
                         {!ready && <span className="progress-border" />}
                     </button>
                 </div>

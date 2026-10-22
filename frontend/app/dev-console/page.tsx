@@ -10,26 +10,32 @@ import ProfileSection from "./components/ProfileSection";
 import SkillsSection from "./components/SkillsSection";
 import ProjectsSection from "./components/ProjectsSection";
 import TimelineSection from "./components/TimelineSection";
+import {
+  User,
+  Code2,
+  FolderGit2,
+  Clock,
+  Terminal,
+  LogIn,
+  LogOut,
+  CheckCircle2,
+  AlertCircle,
+  Info,
+  Menu,
+  Send,
+} from "lucide-react";
 
 type Section = "profile" | "skills" | "projects" | "timeline" | "rawapi";
 
 interface Toast { id: number; msg: string; type: string; }
 
 const NAV = [
-  { id: "profile", icon: "👤", label: "Profile" },
-  { id: "skills", icon: "🛠", label: "Skills" },
-  { id: "projects", icon: "🗂", label: "Projects" },
-  { id: "timeline", icon: "⏳", label: "Timeline" },
-  { id: "rawapi", icon: "⚡", label: "Raw API Tester" },
+  { id: "profile", label: "Profile", icon: User },
+  { id: "skills", label: "Skills", icon: Code2 },
+  { id: "projects", label: "Projects", icon: FolderGit2 },
+  { id: "timeline", label: "Timeline", icon: Clock },
+  { id: "rawapi", label: "Raw API Tester", icon: Terminal },
 ] as const;
-
-// Placeholder visitor stats — replace with real tracking later
-const VISITOR_STATS = [
-  { icon: "👁", value: "1,247", label: "Portfolio Visits", change: "+12% this week" },
-  { icon: "📂", value: "34", label: "Resume Downloads", change: "This month" },
-  { icon: "⭐", value: "312", label: "GitHub Stars", change: "Across repos" },
-  { icon: "🔥", value: "7", label: "Active Days Streak", change: "Current streak" },
-];
 
 export default function DevConsole() {
   const [section, setSection] = useState<Section>("profile");
@@ -37,9 +43,10 @@ export default function DevConsole() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
   const [loginMessage, setLoginMessage] = useState<string | undefined>(undefined);
+  const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false);
   const [pendingAction, setPendingAction] = useState<(() => void) | null>(null);
   const [toasts, setToasts] = useState<Toast[]>([]);
-  const [fetching, setFetching] = useState(true);
+  const [, setFetching] = useState(true);
   const toastCounter = useRef(0);
 
   // Raw API tester state
@@ -51,7 +58,6 @@ export default function DevConsole() {
 
   useEffect(() => {
     setIsLoggedIn(!!localStorage.getItem("access_token"));
-    // Hydrate localStorage with all backend GET data
     fetchAllData().finally(() => setFetching(false));
   }, []);
 
@@ -62,10 +68,10 @@ export default function DevConsole() {
     setTimeout(() => setToasts(t => t.filter(x => x.id !== id)), 3500);
   }, []);
 
-  /* ── Auth gate: run callback only if logged in, else open modal ── */
+  /* ── Auth gate ── */
   const requireAuth = useCallback((cb: () => void) => {
     if (localStorage.getItem("access_token")) { cb(); return; }
-    setLoginMessage("You need to log in to submit changes.");
+    setLoginMessage("Please sign in to save changes.");
     setPendingAction(() => cb);
     setLoginOpen(true);
   }, []);
@@ -73,14 +79,20 @@ export default function DevConsole() {
   function handleLoginSuccess() {
     setIsLoggedIn(true);
     setLoginOpen(false);
-    toast("Logged in successfully!", "success");
+    toast("Signed in successfully.", "success");
     if (pendingAction) { pendingAction(); setPendingAction(null); }
   }
 
-  function handleLogout() {
+  /* ── Logout confirmation ── */
+  function promptLogout() {
+    setLogoutConfirmOpen(true);
+  }
+
+  function confirmLogout() {
     localStorage.removeItem("access_token");
     setIsLoggedIn(false);
-    toast("Logged out.", "info");
+    setLogoutConfirmOpen(false);
+    toast("Logged out successfully.", "info");
   }
 
   /* ── Raw API Tester ── */
@@ -96,10 +108,11 @@ export default function DevConsole() {
     finally { setRawLoading(false); }
   }
 
-  /* ── Section nav ── */
   function navigate(id: Section) { setSection(id); setSidebarOpen(false); }
 
   const sectionProps = { requireAuth, toast };
+  const currentNav = NAV.find(n => n.id === section);
+  const CurrentIcon = currentNav?.icon || User;
 
   return (
     <div className="admin-root">
@@ -113,31 +126,31 @@ export default function DevConsole() {
       {/* ── SIDEBAR ── */}
       <aside className={`admin-sidebar${sidebarOpen ? " open" : ""}`}>
         <div className="admin-sidebar-logo">
-          <div className="logo-badge">Admin Panel</div>
-          <h2>Dev Console</h2>
-          <div style={{ fontSize: "0.72rem", color: "var(--text-dim)", marginTop: 4 }}>
-            {fetching ? "⏳ Fetching data…" : "✅ Data loaded"}
-          </div>
+          <div className="logo-badge">Admin</div>
         </div>
 
         <nav className="admin-nav">
-          <div className="nav-section-label">Navigation</div>
-          {NAV.map(({ id, icon, label }) => (
+          {NAV.map(({ id, icon: Icon, label }) => (
             <button
               key={id}
               className={`admin-nav-item${section === id ? " active" : ""}`}
               onClick={() => navigate(id as Section)}
             >
-              <span className="nav-icon">{icon}</span> {label}
+              <Icon size={16} className="nav-icon" />
+              <span>{label}</span>
             </button>
           ))}
         </nav>
 
-        <div style={{ padding: "12px 16px", borderTop: "1px solid var(--border)" }}>
+        <div style={{ padding: "14px 16px", borderTop: "1px solid var(--admin-border)" }}>
           {isLoggedIn ? (
-            <button className="btn btn-ghost btn-sm" style={{ width: "100%" }} onClick={handleLogout}>🚪 Logout</button>
+            <button className="btn btn-ghost btn-sm" style={{ width: "100%", gap: 7 }} onClick={promptLogout}>
+              <LogOut size={14} /> Log Out
+            </button>
           ) : (
-            <button className="btn btn-primary btn-sm" style={{ width: "100%" }} onClick={() => { setLoginMessage(undefined); setLoginOpen(true); }}>🔐 Login</button>
+            <button className="btn btn-primary btn-sm" style={{ width: "100%", gap: 7 }} onClick={() => { setLoginMessage(undefined); setLoginOpen(true); }}>
+              <LogIn size={14} /> Log In
+            </button>
           )}
         </div>
       </aside>
@@ -148,39 +161,42 @@ export default function DevConsole() {
         {/* ── TOPBAR ── */}
         <header className="admin-topbar">
           <div className="topbar-left">
-            <button className="sidebar-toggle" onClick={() => setSidebarOpen(o => !o)}>☰</button>
-            <span className="topbar-title">
-              {NAV.find(n => n.id === section)?.icon} {NAV.find(n => n.id === section)?.label}
-            </span>
+            <button className="sidebar-toggle" onClick={() => setSidebarOpen(o => !o)} aria-label="Toggle sidebar">
+              <Menu size={18} />
+            </button>
+            <div className="flex items-center gap-2 topbar-title">
+              <CurrentIcon size={18} style={{ color: "var(--admin-accent)" }} />
+              <span>{currentNav?.label}</span>
+            </div>
           </div>
+
           <div className="topbar-right">
             <div className={`auth-badge ${isLoggedIn ? "in" : "out"}`}>
-              {isLoggedIn ? "🟢 Logged in" : "🔴 Not logged in"}
+              <span
+                style={{
+                  width: 7,
+                  height: 7,
+                  borderRadius: "50%",
+                  backgroundColor: isLoggedIn ? "var(--success)" : "var(--danger)",
+                  display: "inline-block"
+                }}
+              />
+              <span>{isLoggedIn ? "Active Session" : "Read Only"}</span>
             </div>
             {isLoggedIn ? (
-              <button className="btn btn-ghost btn-sm" onClick={handleLogout}>Logout</button>
+              <button className="btn btn-ghost btn-sm" onClick={promptLogout} style={{ gap: 6 }}>
+                <LogOut size={13} /> Log Out
+              </button>
             ) : (
-              <button className="btn btn-primary btn-sm" onClick={() => { setLoginMessage(undefined); setLoginOpen(true); }}>🔐 Login</button>
+              <button className="btn btn-primary btn-sm" onClick={() => { setLoginMessage(undefined); setLoginOpen(true); }} style={{ gap: 6 }}>
+                <LogIn size={13} /> Log In
+              </button>
             )}
           </div>
         </header>
 
         {/* ── CONTENT ── */}
         <div className="admin-content">
-
-          {/* Visitor Stats Bar — shown on every section */}
-          {/* <div className="stats-bar" style={{ marginBottom: 24 }}>
-            {VISITOR_STATS.map((s) => (
-              <div className="stat-card" key={s.label}>
-                <div className="stat-icon">{s.icon}</div>
-                <div className="stat-value">{s.value}</div>
-                <div className="stat-label">{s.label}</div>
-                <div className="stat-change">{s.change}</div>
-              </div>
-            ))}
-          </div> */}
-
-          {/* ── SECTIONS ── */}
           {section === "profile" && <ProfileSection  {...sectionProps} />}
           {section === "skills" && <SkillsSection   {...sectionProps} />}
           {section === "projects" && <ProjectsSection {...sectionProps} />}
@@ -189,10 +205,13 @@ export default function DevConsole() {
           {/* ── RAW API TESTER ── */}
           {section === "rawapi" && (
             <div>
-              <div className="section-header"><h2>⚡ Raw API Tester</h2><p>Send any request directly to the backend. Useful for debugging and testing endpoints.</p></div>
+              <div className="section-header">
+                <h2>Raw API Explorer</h2>
+                <p>Execute direct requests to backend endpoints for verification and testing.</p>
+              </div>
               <div className="card">
-                <div className="card-title"><span>🔌</span> Request</div>
-                <div style={{ display: "flex", gap: 8, marginBottom: 10, flexWrap: "wrap" }}>
+                <div className="card-title">Request Payload</div>
+                <div style={{ display: "flex", gap: 8, marginBottom: 12, flexWrap: "wrap" }}>
                   <select className="form-select" style={{ width: 120, flex: "none" }} value={rawMethod} onChange={e => setRawMethod(e.target.value)}>
                     {["GET", "POST", "PUT", "DELETE", "PATCH"].map(m => <option key={m}>{m}</option>)}
                   </select>
@@ -204,12 +223,24 @@ export default function DevConsole() {
                     <textarea className="textarea-code" rows={8} value={rawBody} onChange={e => setRawBody(e.target.value)} />
                   </div>
                 )}
-                <button className="btn btn-primary" disabled={rawLoading} onClick={runRaw}>{rawLoading ? "Sending…" : "▶ Send Request"}</button>
+                <button className="btn btn-primary" disabled={rawLoading} onClick={runRaw} style={{ gap: 6 }}>
+                  <Send size={14} /> {rawLoading ? "Sending…" : "Send Request"}
+                </button>
               </div>
               <div className="card">
-                <div className="card-title"><span>📥</span> Response</div>
-                <pre style={{ background: "var(--surface)", color: "#a8ff78", padding: 16, borderRadius: 8, fontSize: "0.8rem", overflowX: "auto", maxHeight: 500, fontFamily: "monospace" }}>
-                  {rawResponse ? JSON.stringify(rawResponse, null, 2) : "No response yet…"}
+                <div className="card-title">Response</div>
+                <pre style={{
+                  background: "var(--admin-card)",
+                  color: "var(--admin-accent)",
+                  border: "1px solid var(--admin-border)",
+                  padding: 16,
+                  borderRadius: "var(--radius-sm, 4px)",
+                  fontSize: "0.82rem",
+                  overflowX: "auto",
+                  maxHeight: 500,
+                  fontFamily: "var(--ff-mono, monospace)"
+                }}>
+                  {rawResponse ? JSON.stringify(rawResponse, null, 2) : "No response yet."}
                 </pre>
               </div>
             </div>
@@ -226,11 +257,32 @@ export default function DevConsole() {
         />
       )}
 
+      {/* ── LOGOUT CONFIRMATION MODAL ── */}
+      {logoutConfirmOpen && (
+        <div className="modal-overlay" onClick={() => setLogoutConfirmOpen(false)}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-title">Confirm Logout</div>
+            <div className="modal-subtitle">
+              Are you sure you want to end your current session? Any unsaved edits will be discarded.
+            </div>
+            <div className="btn-group" style={{ justifyContent: "flex-end", marginTop: 24, gap: 10 }}>
+              <button className="btn btn-ghost" onClick={() => setLogoutConfirmOpen(false)}>
+                Cancel
+              </button>
+              <button className="btn btn-danger" onClick={confirmLogout} style={{ gap: 6 }}>
+                <LogOut size={14} /> Confirm Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ── TOASTS ── */}
       <div style={{ position: "fixed", bottom: 24, right: 24, display: "flex", flexDirection: "column", gap: 8, zIndex: 2000 }}>
         {toasts.map(t => (
-          <div key={t.id} className={`toast toast-${t.type === "error" ? "error" : t.type === "info" ? "info" : "success"}`}>
-            {t.type === "error" ? "❌" : t.type === "info" ? "ℹ️" : "✅"} {t.msg}
+          <div key={t.id} className={`toast toast-${t.type === "error" ? "error" : t.type === "info" ? "info" : "success"}`} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            {t.type === "error" ? <AlertCircle size={16} /> : t.type === "info" ? <Info size={16} /> : <CheckCircle2 size={16} />}
+            <span>{t.msg}</span>
           </div>
         ))}
       </div>

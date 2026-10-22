@@ -1,56 +1,77 @@
 import React from 'react';
-import { FaGithub, FaCodeBranch, FaBook } from 'react-icons/fa';
+import { FaGithub, FaBook } from 'react-icons/fa';
 
 const GithubCard = ({ data }) => {
   if (!data) return null;
 
   return (
     <div
-      className="platform-banner rounded-2xl p-8 md:p-10 hover:scale-[1.02] transition-all duration-500 group border border-gray-700/50 common-padding"
+      className="glass-card flex flex-col gap-6"
       style={{
-        background: 'linear-gradient(135deg, rgba(30,30,30,0.6), rgba(15,15,15,0.8))',
-        backdropFilter: 'blur(10px)',
+        background: 'var(--surface)',
+        borderColor: 'var(--border)',
       }}
     >
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-3xl font-bold flex items-center gap-3 text-white">
-          <FaGithub className="text-4xl" /> GitHub
+      <div className="flex items-center justify-between pb-4 border-b" style={{ borderColor: 'var(--border)' }}>
+        <h2 className="text-xl font-normal flex items-center gap-2.5 text-white" style={{ fontFamily: 'var(--serif)' }}>
+          <FaGithub className="text-2xl text-[var(--accent)]" /> GitHub
         </h2>
-        <div className="text-sm px-3 py-1 rounded-full bg-blue-600/20 text-blue-400 border border-blue-500/30">
-          Last 30 Days: {data.total_commits_last_30_days} Commits
+        <div
+          className="text-xs px-2.5 py-1 rounded"
+          style={{
+            fontFamily: 'var(--mono)',
+            background: 'var(--accent-soft)',
+            color: 'var(--accent)',
+          }}
+        >
+          {data.total_commits_last_30_days} Commits / 30d
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-8">
+      <div className="flex flex-col md:flex-row gap-6 items-start">
         {/* Left Col: User Profile */}
-        <div className="flex items-center gap-5 min-w-[250px]">
+        <div className="flex items-center gap-4 min-w-[220px]">
           <a href={`https://github.com/${data.username}`} target="_blank" rel="noreferrer">
             <img
               src={data.avatar_url}
               alt="GitHub Avatar"
-              className="w-24 h-24 rounded-full border-4 border-gray-700 object-cover group-hover:border-blue-500 transition-all duration-300"
+              className="w-16 h-16 rounded-md object-cover transition-opacity duration-200 hover:opacity-80"
+              style={{
+                border: '1px solid var(--border)',
+              }}
             />
           </a>
           <div>
-            <a href={`https://github.com/${data.username}`} target="_blank" rel="noreferrer" className="group-hover:text-blue-400 transition-colors">
-              <h3 className="text-2xl font-bold text-white">{data.username}</h3>
+            <a href={`https://github.com/${data.username}`} target="_blank" rel="noreferrer" className="hover:text-[var(--accent)] transition-colors">
+              <h3 className="text-lg font-medium text-white">{data.username}</h3>
             </a>
-            <div className="flex items-center gap-2 text-gray-400 mt-2">
-              <FaBook /> {data.public_repos?.length || 0} Public Repos
+            <div className="flex items-center gap-1.5 mt-1 text-xs" style={{ color: 'var(--text-dim)', fontFamily: 'var(--mono)' }}>
+              <FaBook size={12} /> {data.public_repos?.length || 0} Repos
             </div>
           </div>
         </div>
 
         {/* Right Col: Top Languages */}
-        <div className="flex-1 bg-black/30 rounded-xl p-4 border border-white/5">
-          <h4 className="text-sm text-gray-400 mb-3 uppercase tracking-wider font-semibold">Top Languages</h4>
-          <div className="flex flex-wrap gap-2">
+        <div className="flex-1 w-full">
+          <h4 className="text-xs mb-2.5 uppercase tracking-wider" style={{ color: 'var(--text-muted)', fontFamily: 'var(--mono)' }}>
+            Top Languages
+          </h4>
+          <div className="flex flex-wrap gap-1.5">
             {data.top_languages && Object.entries(data.top_languages)
               .sort(([, a], [, b]) => b - a)
               .slice(0, 6)
               .map(([lang]) => (
-                <span key={lang} className="px-3 py-1 text-sm bg-gray-800 text-gray-300 rounded-md border border-gray-700">
+                <span
+                  key={lang}
+                  className="px-2 py-0.5 text-xs rounded"
+                  style={{
+                    background: 'var(--surface-2)',
+                    color: 'var(--text-dim)',
+                    border: '1px solid var(--border)',
+                    fontFamily: 'var(--mono)'
+                  }}
+                >
                   {lang}
                 </span>
               ))}

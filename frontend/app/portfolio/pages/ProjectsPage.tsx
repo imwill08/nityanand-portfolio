@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { getFromStorage } from "@/services/adminData";
 import { FaGithub } from "react-icons/fa";
 import { FiExternalLink } from "react-icons/fi";
+import BilingualHeading from "../components/BilingualHeading";
 import "./projects.css";
 
 interface Project {
@@ -60,8 +61,8 @@ export default function ProjectsPage() {
 
     return (
         <div className="page-container projects-page">
-            <h1 className="section-title">Projects</h1>
-            <p className="section-subtitle">Things I&apos;ve built</p>
+            <BilingualHeading as="h1" en="Projects" hi="परियोजनाएं" className="section-title" />
+            <BilingualHeading as="p" en="Things I've built" hi="जो मैंने बनाया है" className="section-subtitle" />
 
             {grouped.length === 0 ? (
                 <div className="empty-state glass-card">

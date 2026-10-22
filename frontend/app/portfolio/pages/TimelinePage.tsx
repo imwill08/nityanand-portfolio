@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { getFromStorage } from "@/services/adminData";
+import BilingualHeading from "../components/BilingualHeading";
 import "./timeline.css";
 
 interface TimelineEntry {
@@ -27,8 +28,8 @@ export default function TimelinePage() {
 
     return (
         <div className="page-container timeline-page">
-            <h1 className="section-title">Timeline</h1>
-            <p className="section-subtitle">My journey — education, work &amp; milestones</p>
+            <BilingualHeading as="h1" en="Timeline" hi="समयरेखा एवं अनुभव" className="section-title" />
+            <BilingualHeading as="p" en="My journey — education, work & milestones" hi="मेरी यात्रा — शिक्षा, कार्य एवं अनुभव" className="section-subtitle" />
 
             {entries.length === 0 ? (
                 <div className="empty-state glass-card">
@@ -38,36 +39,27 @@ export default function TimelinePage() {
                 <div className="timeline-list">
                     {entries.map((entry, idx) => (
                         <div className="timeline-item glass-card" key={entry.id ?? idx}>
-                            <div className="timeline-dot" style={{ left: '-6px' }} />
-                            <div className="timeline-body flex flex-col md:flex-row gap-6">
-                                {/* Left Side: Logo */}
-                                <div className="flex-shrink-0 w-20 h-20 bg-black/40 rounded-xl border border-white/10 flex items-center justify-center p-2 hidden sm:flex">
+                            <div className="timeline-row">
+                                <span className="timeline-dates">{entry.date}</span>
+
+                                <div className="timeline-logo">
                                     {entry.logo_path ? (
                                         <img
                                             src={entry.logo_path.startsWith('http') || entry.logo_path.startsWith('blob:') ? entry.logo_path : `${(process.env.NEXT_PUBLIC_API_BASE_URL || '').replace(/\/+$/, '')}/static${entry.logo_path.startsWith('/') ? '' : '/'}${entry.logo_path}`}
                                             alt={entry.header}
-                                            className="w-full h-full object-contain filter drop-shadow-md"
                                         />
                                     ) : (
-                                        <span className="text-3xl">📅</span>
+                                        <span>{(entry.header ?? "·").charAt(0)}</span>
                                     )}
                                 </div>
 
-                                {/* Right Side: Content */}
-                                <div className="flex-1">
-                                    <div className="timeline-meta flex items-center justify-between mb-2">
-                                        <span className="timeline-dates font-bold text-blue-400">
-                                            {entry.date}
-                                        </span>
-                                    </div>
-                                    <h3 className="timeline-title text-2xl font-bold text-white mb-1">
-                                        {entry.header}
-                                    </h3>
+                                <div>
+                                    <h3 className="timeline-title">{entry.header}</h3>
                                     {entry.subheader && (
-                                        <p className="timeline-org text-lg text-gray-300 font-semibold mb-3">📍 {entry.subheader}</p>
+                                        <p className="timeline-org">{entry.subheader}</p>
                                     )}
                                     {entry.description && (
-                                        <p className="timeline-desc text-gray-400 whitespace-pre-wrap">{entry.description}</p>
+                                        <p className="timeline-desc">{entry.description}</p>
                                     )}
                                 </div>
                             </div>

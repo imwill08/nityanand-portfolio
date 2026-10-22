@@ -1,0 +1,16 @@
+{
+  "name": "nityanand-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Nityanand Portfolio - Full-Stack Next.js and FastAPI application",
+  "scripts": {
+    "build": "npm run build:frontend && npm run build:backend",
+    "build:frontend": "npm run build --prefix frontend",
+    "build:backend": "powershell -Command \"Write-Host 'Backend (Python FastAPI) requires no compilation build step. Ready to run with npm run start:backend.'\"",
+    "install:backend": "powershell -Command \"cd backend; .\\venv\\Scripts\\pip install -r requirements.txt\"",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "lint:frontend": "npm run lint --prefix frontend",
+    "dev:backend": "powershell -Command \"cd backend; .\\venv\\Scripts\\uvicorn app.main:app --reload\"",
+    "start:backend": "powershell -Command \"cd backend; .\\venv\\Scripts\\uvicorn app.main:app --host 0.0.0.0 --port 8000\""
+  }
+}

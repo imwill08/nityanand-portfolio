@@ -24,48 +24,16 @@ const PAGE_TRANSITIONS: Record<Page, Partial<Record<Direction, Page>>> = {
     bottom: { up: "center", down: "top", left: "left", right: "right" },
 };
 
-/** Background-position for each page (bg-size 250% 250%) */
-const BG_POSITION: Record<Page, string> = {
-    center: "50% 50%",
-    left: "20% 50%",
-    right: "80% 50%",
-    top: "50% 20%",
-    bottom: "50% 80%",
-};
-
-/** Pairs of pages that are "opposite" — transition must pass through center */
-const NEEDS_CENTER_HOP: Array<[Page, Page]> = [
-    ["left", "right"],
-    ["top", "bottom"],
-];
-
-function needsCenterHop(a: Page, b: Page) {
-    return NEEDS_CENTER_HOP.some(
-        ([x, y]) => (a === x && b === y) || (a === y && b === x)
-    );
-}
-
 export default function PageLayout() {
     const [activePage, setActivePage] = useState<Page>("center");
-    const [transitioning, setTransitioning] = useState(false);
 
     /** Navigate by page name (center/left/right/top/bottom) */
     const navigateTo = useCallback(
         (target: Page) => {
-            if (transitioning || target === activePage) return;
-
-            if (needsCenterHop(activePage, target)) {
-                setTransitioning(true);
-                setActivePage("center");
-                setTimeout(() => {
-                    setActivePage(target);
-                    setTransitioning(false);
-                }, 650); // wait for bg slide to center, then slide to target
-            } else {
-                setActivePage(target);
-            }
+            if (target === activePage) return;
+            setActivePage(target);
         },
-        [activePage, transitioning]
+        [activePage]
     );
 
     /** Navigate by direction (up/down/left/right) */
@@ -80,7 +48,6 @@ export default function PageLayout() {
     // ── Keyboard navigation ────────────────────────────────────────────────────
     useEffect(() => {
         const handler = (e: KeyboardEvent) => {
-            // Do not intercept if user is typing in an input, textarea, or contenteditable
             const target = e.target as HTMLElement;
             if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable)) {
                 return;
@@ -105,7 +72,7 @@ export default function PageLayout() {
     // ── Scroll to top after each page change ──────────────────────────────────
     useEffect(() => {
         const el = document.getElementById("portfolio-scroll");
-        if (el) el.scrollTo({ top: 0, behavior: "smooth" });
+        if (el) el.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
     }, [activePage]);
 
     const renderPage = () => {
@@ -120,14 +87,6 @@ export default function PageLayout() {
 
     return (
         <div className="portfolio-wrapper">
-            {/* Sliding background */}
-
-            <div
-                className="portfolio-bg"
-                style={{ backgroundPosition: BG_POSITION[activePage] }}
-            />
-            <div className="portfolio-overlay" />
-
             {/* Fixed navigation */}
             <Navigation
                 activePage={activePage}

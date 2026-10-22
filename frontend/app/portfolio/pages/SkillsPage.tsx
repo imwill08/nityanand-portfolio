@@ -6,6 +6,7 @@ import SkillCard from "../components/SkillCard";
 import GithubCard from "../components/stats/GithubCard";
 import LeetcodeCard from "../components/stats/LeetcodeCard";
 import CodeforcesCard from "../components/stats/CodeforcesCard";
+import BilingualHeading from "../components/BilingualHeading";
 import "./skills.css";
 
 interface Skill {
@@ -78,10 +79,16 @@ export default function SkillsPage() {
     ];
     const displayCategories = ORDERED_CATS.filter(c => categories[c]?.length > 0);
 
+    const HINDI_CAT_MAP: Record<string, string> = {
+        "Programming Languages": "प्रोग्रामिंग भाषाएं",
+        "Frameworks & Libraries": "फ्रेमवर्क एवं लाइब्रेरी",
+        "Databases & Tools": "डेटाबेस एवं टूल्स",
+    };
+
     return (
-        <div className="page-container skills-page ">
-            <h1 className="section-title">Skills</h1>
-            <p className="section-subtitle">What I work with</p>
+        <div className="page-container skills-page">
+            <BilingualHeading as="h1" en="Skills" hi="तकनीकी कौशल" className="section-title" />
+            <BilingualHeading as="p" en="What I work with" hi="जिन तकनीकों पर मैं काम करता हूँ" className="section-subtitle" />
 
             {/* Skills by category */}
             {displayCategories.length === 0 ? (
@@ -91,13 +98,17 @@ export default function SkillsPage() {
             ) : (
                 displayCategories.map((cat) => (
                     <div className="skills-category" key={cat}>
-                        <h2 className="skills-cat-title">{cat}</h2>
-                        <div className="skills-grid" style={{ display: "flex", flexWrap: "wrap", gap: "2rem", justifyContent: "center", marginBottom: "3rem" }}>
+                        <BilingualHeading
+                            as="h2"
+                            en={cat}
+                            hi={HINDI_CAT_MAP[cat] || cat}
+                            className="skills-cat-title"
+                        />
+                        <div className="skills-grid">
                             {categories[cat].map((sk, idx) => {
                                 let finalIconUrl = sk.icon || (sk as any).logo_path;
                                 if (finalIconUrl && !finalIconUrl.startsWith("http") && !finalIconUrl.startsWith("blob:")) {
                                     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
-                                    // if it's already a static path from api, don't double append
                                     const path = finalIconUrl.startsWith("/static") ? finalIconUrl : `/static${finalIconUrl.startsWith("/") ? "" : "/"}${finalIconUrl}`;
                                     finalIconUrl = baseUrl.replace(/\/$/, "") + path;
                                 }
@@ -107,7 +118,6 @@ export default function SkillsPage() {
                                         key={sk.id ?? idx}
                                         logo={finalIconUrl || ""}
                                         text={sk.name || "Skill"}
-                                        hoverColors={[(sk as any).hover_color_primary || "#ffd43b", (sk as any).hover_color_secondary]}
                                     />
                                 );
                             })}

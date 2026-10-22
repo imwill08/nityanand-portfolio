@@ -613,28 +613,28 @@ export default function TimelineSection({ requireAuth, toast }: Props) {
     return (
         <div>
             <div className="section-header">
-                <h2>⏳ Timeline</h2>
+                <h2>Timeline</h2>
                 <p>Manage your education, experience, and other timeline entries.</p>
             </div>
 
             {/* Three-button pattern */}
             <div className="action-strip">
                 <span className="action-strip-text">
-                    📋 Edit below. Add to preview, Apply to localStorage, Submit to backend.
+                    Edit below. Add to preview, Apply to localStorage, Submit to backend.
                 </span>
                 <button
                     className="btn btn-warning btn-sm"
                     onClick={applyPreview}
                     disabled={loading}
                 >
-                    ⚡ Apply (Preview)
+                    Apply (Preview)
                 </button>
                 <button
                     className="btn btn-success btn-sm"
                     disabled={loading || totalPending === 0}
                     onClick={() => requireAuth(() => submitAll())}
                 >
-                    {loading ? "Saving…" : `✅ Submit All${totalPending > 0 ? ` (${totalPending} pending)` : ''}`}
+                    {loading ? "Saving…" : `Submit All${totalPending > 0 ? ` (${totalPending} pending)` : ''}`}
                 </button>
                 <button
                     className="btn btn-primary btn-sm"
@@ -652,18 +652,19 @@ export default function TimelineSection({ requireAuth, toast }: Props) {
             {/* Pending items indicator */}
             {totalPending > 0 && (
                 <div className="info-message" style={{
-                    padding: '8px 16px',
+                    padding: '10px 16px',
                     marginBottom: '16px',
-                    backgroundColor: '#fef3c7',
-                    borderRadius: '8px',
-                    color: '#92400e'
+                    backgroundColor: 'var(--admin-card)',
+                    border: '1px solid var(--admin-border)',
+                    borderRadius: 'var(--radius-sm, 4px)',
+                    color: 'var(--admin-text-bright)'
                 }}>
-                    ⏳ You have {totalPending} unsaved timeline entr{totalPending > 1 ? 'ies' : 'y'} in preview.
-                    Click "Apply" to see in portfolio or "Submit All" to save to backend.
+                    You have {totalPending} unsaved timeline entr{totalPending > 1 ? 'ies' : 'y'} in preview.
+                    Click "Apply" to see in portfolio or "Submit All" to save permanently.
                 </div>
             )}
 
-            {showAdd && renderItemForm(addTempItem, "➕ Add to Preview", true, true)}
+            {showAdd && renderItemForm(addTempItem, "Add to Preview", true, true)}
 
             <div className="items-list">
                 {allItems.map(item => {

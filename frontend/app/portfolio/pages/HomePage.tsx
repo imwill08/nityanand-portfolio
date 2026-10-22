@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { getFromStorage } from "@/services/adminData";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { FiExternalLink, FiMail, FiPhone, FiMapPin } from "react-icons/fi";
+import BilingualHeading from "../components/BilingualHeading";
 
 import "./home.css";
 
@@ -173,49 +174,50 @@ export default function HomePage({ onNavigate }: HomePageProps) {
 
             {/* ── HERO ── */}
             <motion.section
-                className="home-hero glass-card"
-                initial={{ opacity: 0, y: 40 }}
+                className="home-hero"
+                initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
             >
                 <div className="hero-text">
-                    <p className="hero-intro">Welcome to my portfolio</p>
-                    <h1 className="hero-name">Nityanand</h1>
-                    <p className="hero-tagline">Software Developer(WEB) | React/ Next Developer</p>
-                    <p className="hero-cred">Techgropse Pvt. Ltd. | Formerly at Chandigarh University</p>
+                    <p className="hero-intro">
+                        Software developer
+                        {profileData?.contact?.location ? ` · ${profileData.contact.location}` : ""}
+                    </p>
+                    <h1 className="hero-name">
+                        Hi, I&apos;m Nityanand. I build <em>web products</em> with React &amp; Next.js.
+                    </h1>
+                    <p className="hero-cred">
+                        Currently at <strong>Techgropse Pvt. Ltd.</strong> Previously at Chandigarh University.
+                    </p>
                     <div className="hero-buttons">
-                        {profileData?.resume_ai_ml && (
-                            <a href={profileData.resume_ai_ml} target="_blank" className="home-link-btn">
-                                Data Science Resume ⬇
+                        {profileData?.resume_webdev && (
+                            <a href={profileData.resume_webdev} target="_blank" className="home-link-btn is-primary">
+                                Web Dev Resume ↓
                             </a>
                         )}
-                        {profileData?.resume_webdev && (
-                            <a href={profileData.resume_webdev} target="_blank" className="home-link-btn">
-                                Web Dev Resume ⬇
+                        {profileData?.resume_ai_ml && (
+                            <a href={profileData.resume_ai_ml} target="_blank" className="home-link-btn">
+                                Data Science Resume ↓
                             </a>
                         )}
                         {profileData?.github_url && (
                             <a href={profileData.github_url} target="_blank" className="icon-link" aria-label="GitHub">
-                                <FaGithub size={24} />
+                                <FaGithub size={20} />
                             </a>
                         )}
                         {profileData?.linkedin_url && (
                             <a href={profileData.linkedin_url} target="_blank" className="icon-link" aria-label="LinkedIn">
-                                <FaLinkedin size={24} />
+                                <FaLinkedin size={20} />
                             </a>
                         )}
                     </div>
                 </div>
 
                 {profileImage && (
-                    <motion.img
-                        src={profileImage}
-                        className="hero-avatar"
-                        alt="Profile"
-                        initial={{ y: 0 }}
-                        animate={{ y: [0, -8, 0] }}
-                        transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
-                    />
+                    <figure className="hero-figure">
+                        <img src={profileImage} className="hero-avatar" alt="Nityanand" />
+                    </figure>
                 )}
             </motion.section>
 
@@ -223,7 +225,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
             {/* ── FEATURED PROJECTS (3 cards, image top / title+links bottom) ── */}
             {projects.length > 0 && (
                 <section className="glass-card">
-                    <h2 className="section-title">Featured Projects</h2>
+                    <BilingualHeading en="Featured Projects" hi="प्रमुख परियोजनाएं" className="section-title" />
 
                     <div className="home-projects-grid">
                         {projects.map((p, i) => {
@@ -272,7 +274,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
             {/* ── SKILLS PREVIEW — large floating icons, 6 across on desktop ── */}
             {previewSkills.length > 0 && (
                 <section className="glass-card">
-                    <h2 className="section-title">Skills</h2>
+                    <BilingualHeading en="Skills" hi="कौशल एवं तकनीक" className="section-title" />
 
                     <div className="skills-float-row">
                         {previewSkills.map((s, i) => {
@@ -280,21 +282,14 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                                 (s.icon as string) || (s.logo_path as string) || ""
                             );
                             return iconSrc ? (
-                                <motion.div
+                                <div
                                     key={i}
                                     className="skill-float-icon"
                                     title={s.name as string}
-                                    initial={{ y: 0 }}
-                                    animate={{ y: [0, -10, 0] }}
-                                    transition={{
-                                        repeat: Infinity,
-                                        duration: 2.8 + i * 0.4,
-                                        ease: "easeInOut",
-                                        delay: i * 0.2,
-                                    }}
                                 >
                                     <img src={iconSrc} alt={s.name as string} />
-                                </motion.div>
+                                    <span>{s.name as string}</span>
+                                </div>
                             ) : null;
                         })}
                     </div>
@@ -308,7 +303,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
 
             {/* ── ABOUT ME (expanded, no contact here) ── */}
             <section className="glass-card about-section">
-                <h2 className="section-title">About Me</h2>
+                <BilingualHeading en="About Me" hi="मेरे बारे में" className="section-title" />
 
                 {profileData?.description1 && <p className="about-para">{profileData.description1}</p>}
                 {profileData?.description2 && <p className="about-para">{profileData.description2}</p>}
@@ -328,7 +323,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                 {/* What I Do */}
                 {(profileData?.what_i_do?.filter(w => w.enabled !== false) ?? []).length > 0 && (
                     <div className="about-what-i-do">
-                        <h3 className="about-subheader">What I Do</h3>
+                        <BilingualHeading as="h3" en="What I Do" hi="मेरी विशेषज्ञता" className="about-subheader" />
                         <div className="what-i-do-grid">
                             {profileData!.what_i_do!.filter(w => w.enabled !== false).map((w, i) => (
                                 <div key={i} className="what-i-do-card glass-card">
@@ -343,7 +338,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                 {/* Soft Skills */}
                 {(profileData?.soft_skills ?? []).length > 0 && (
                     <div className="about-soft-skills">
-                        <h3 className="about-subheader">Soft Skills</h3>
+                        <BilingualHeading as="h3" en="Core Technologies" hi="प्रमुख कौशल" className="about-subheader" />
                         <div className="soft-skills-tags">
                             {profileData!.soft_skills!.map((sk, i) => (
                                 <span key={i} className="soft-skill-tag">{sk}</span>
@@ -357,7 +352,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
             {/* ── RECENT JOURNEY — horizontal timeline cards ── */}
             {timeline.length > 0 && (
                 <section className="glass-card">
-                    <h2 className="section-title">Recent Journey</h2>
+                    <BilingualHeading en="Recent Journey" hi="मेरी यात्रा" className="section-title" />
 
                     <div className="timeline-preview-row">
                         {timeline.map((t, i) => {
@@ -368,14 +363,14 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                                         {logoSrc ? (
                                             <img src={logoSrc} alt={t.header} />
                                         ) : (
-                                            <span>📅</span>
+                                            <span>{(t.header ?? "·").charAt(0)}</span>
                                         )}
                                     </div>
                                     <div className="timeline-mini-body">
                                         <span className="timeline-mini-date">{t.date}</span>
                                         <strong className="timeline-mini-header">{t.header}</strong>
                                         {t.subheader && (
-                                            <span className="timeline-mini-sub">📍 {t.subheader}</span>
+                                            <span className="timeline-mini-sub">{t.subheader}</span>
                                         )}
                                     </div>
                                 </div>
@@ -393,7 +388,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
             {/* ── GET IN TOUCH — contact card at bottom ── */}
             {profileData?.contact && profileData.contact.enabled !== false && (
                 <section className="glass-card contact-card">
-                    <h2 className="section-title">Get In Touch</h2>
+                    <BilingualHeading en="Get In Touch" hi="संपर्क करें" className="section-title" />
                     <p className="contact-tagline">
                         Feel free to reach out for collaboration, opportunities, or just a quick hello.
                     </p>

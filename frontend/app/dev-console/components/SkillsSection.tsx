@@ -390,28 +390,28 @@ export default function SkillsSection({ requireAuth, toast }: Props) {
   return (
     <div>
       <div className="section-header">
-        <h2>🛠 Skills</h2>
+        <h2>Skills</h2>
         <p>Manage your technical skills grouped by category.</p>
       </div>
 
       {/* Apply / Submit strip */}
       <div className="action-strip">
         <span className="action-strip-text">
-          📋 Edit your skills below. Apply previews locally; Submit saves all changes to the backend.
+          Edit your skills below. Apply previews locally; Submit saves all changes to the backend.
         </span>
         <button
           className="btn btn-warning btn-sm"
           onClick={applyPreview}
           disabled={loading}
         >
-          ⚡ Apply (Preview)
+          Apply (Preview)
         </button>
         <button
           className="btn btn-success btn-sm"
           disabled={loading || tempSkills.length === 0}
           onClick={() => requireAuth(submitAllSkills)}
         >
-          {loading ? "Saving…" : `✅ Submit All${tempSkills.length > 0 ? ` (${tempSkills.length} pending)` : ''}`}
+          {loading ? "Saving…" : `Submit All${tempSkills.length > 0 ? ` (${tempSkills.length} pending)` : ''}`}
         </button>
         <button
           className="btn btn-primary btn-sm"
@@ -428,26 +428,25 @@ export default function SkillsSection({ requireAuth, toast }: Props) {
 
       {/* Show pending skills indicator */}
       {tempSkills.length > 0 && (
-        <div className="info-message" style={{ padding: '8px 16px', marginBottom: '16px', backgroundColor: '#fef3c7', borderRadius: '8px', color: '#92400e' }}>
-          ⏳ You have {tempSkills.length} unsaved skill{tempSkills.length > 1 ? 's' : ''} in preview. Click "Apply" to see in portfolio or "Submit All" to save to backend.
+        <div className="info-message" style={{ padding: '10px 16px', marginBottom: '16px', backgroundColor: 'var(--admin-card)', border: '1px solid var(--admin-border)', borderRadius: 'var(--radius-sm, 4px)', color: 'var(--admin-text-bright)' }}>
+          You have {tempSkills.length} unsaved skill{tempSkills.length > 1 ? 's' : ''} in preview. Click "Apply" to see in portfolio or "Submit All" to save permanently.
         </div>
       )}
 
-      {showAdd && renderSkillForm(addTempSkill, "➕ Add to Preview", true)}
+      {showAdd && renderSkillForm(addTempSkill, "Add to Preview", true)}
 
       {grouped.map(({ cat, items }) => (
         <div key={cat.value} className="card">
           <div className="card-title">
-            <span>📦</span> {cat.label} <span className="badge badge-purple">{items.length}</span>
+            {cat.label} <span className="badge badge-purple" style={{ marginLeft: 8 }}>{items.length}</span>
             {cat.value === CATEGORIES[0].value && tempSkills.length > 0 && (
-              <span className="badge badge-warning" style={{ marginLeft: '8px' }}>{tempSkills.length} pending</span>
+              <span className="badge badge-yellow" style={{ marginLeft: '8px' }}>{tempSkills.length} pending</span>
             )}
           </div>
 
           {items.length === 0 ? (
             <div className="empty-state">
-              <div className="empty-icon">📭</div>
-              <p>No skills in this category yet</p>
+              <p>No skills in this category yet.</p>
             </div>
           ) : (
             <div className="items-list">

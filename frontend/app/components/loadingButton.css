@@ -1,37 +1,43 @@
 .animated-button {
   position: relative;
-  font-size: 18px;
-  padding: 12px 28px;
+  font-family: var(--ff-mono), ui-monospace, monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+  padding: 0.85rem 1.75rem;
   background: transparent;
-  color: #ffffff;
-  border: 2px solid #ffffff88;
-  border-radius: 50px;
+  color: #736a5e;
+  border: 1px solid #3a332c;
+  border-radius: 4px;
   cursor: not-allowed;
   overflow: hidden;
   z-index: 1;
-  transition: all 0.3s ease-in-out;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
 }
 
 .animated-button.ready {
   cursor: pointer;
-  color: #fff;
-  border-color: #0ff;
-  box-shadow: 0 0 20px #0ff;
+  color: #ece5d8;
+  border-color: #d97757;
 }
 
+.animated-button.ready:hover {
+  background: #d97757;
+  color: #13110f;
+}
+
+/* thin progress line along the bottom while loading */
 .animated-button .progress-border {
-  content: "";
   position: absolute;
-  top: -2px;
-  left: -2px;
-  width: calc(100% + 4px);
-  height: calc(100% + 4px);
-  border: 2px solid #00ffff88;
-  border-radius: 50px;
+  left: 0;
+  bottom: 0;
+  height: 1px;
+  width: 100%;
+  background: #d97757;
   transform: scaleX(0);
   transform-origin: left;
   z-index: -1;
-  animation: fill-border 4s linear forwards;
+  animation: fill-border 2.5s linear forwards;
 }
 
 .animated-button.ready .progress-border {
@@ -42,6 +48,7 @@
   from {
     transform: scaleX(0);
   }
+
   to {
     transform: scaleX(1);
   }
