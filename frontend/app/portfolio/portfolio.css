@@ -111,6 +111,20 @@
     color: var(--text-main);
 }
 
+/* When admin console is active, lock outer scroll so admin sidebar is fixed and admin-main scrolls internally */
+.portfolio-content.has-admin,
+.portfolio-content:has(.admin-root) {
+    overflow: hidden;
+    height: 100vh;
+}
+
+.portfolio-content.has-admin .time-travel-stage,
+.portfolio-content.has-admin .time-travel-page,
+.portfolio-content:has(.admin-root) .time-travel-stage,
+.portfolio-content:has(.admin-root) .time-travel-page {
+    height: 100%;
+}
+
 .portfolio-content::-webkit-scrollbar {
     width: 7px;
 }

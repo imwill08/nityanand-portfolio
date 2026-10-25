@@ -162,7 +162,7 @@ export default function PageLayout() {
             )}
 
             {/* Scrollable page content with Relativistic Time-Travel Warp */}
-            <div className="portfolio-content" id="portfolio-scroll">
+            <div className={`portfolio-content${activePage === "top" ? " has-admin" : ""}`} id="portfolio-scroll">
                 <div className="time-travel-stage">
                     <AnimatePresence mode="wait" custom={direction}>
                         <motion.div

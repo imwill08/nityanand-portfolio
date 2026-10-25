@@ -51,7 +51,9 @@
 
 .admin-root {
   display: flex;
-  min-height: 100vh;
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
   background: var(--admin-bg);
   color: var(--admin-text);
   font-family: var(--ff-sans, 'Inter', system-ui, sans-serif);
@@ -60,18 +62,9 @@
 
 /* ── Embedded inside Portfolio Layout ── */
 .portfolio-content .admin-root {
-  min-height: calc(100vh - var(--nav-height));
-}
-
-.portfolio-content .admin-sidebar {
-  top: var(--nav-height);
   height: calc(100vh - var(--nav-height));
-  z-index: 90;
-}
-
-.portfolio-content .admin-topbar {
-  top: 0;
-  z-index: 80;
+  max-height: calc(100vh - var(--nav-height));
+  min-height: 0;
 }
 
 /* ── SIDEBAR ── */
@@ -81,12 +74,37 @@
   border-right: 1px solid var(--admin-border);
   display: flex;
   flex-direction: column;
-  position: fixed;
-  top: 0; left: 0;
-  height: 100vh;
-  z-index: 200;
+  position: sticky;
+  top: 0;
+  left: 0;
+  height: 100%;
+  flex-shrink: 0;
+  z-index: 90;
   transition: transform 0.28s cubic-bezier(.4,0,.2,1), background-color 0.22s ease;
   overflow-y: auto;
+}
+
+/* Scrollbars for sidebar and main */
+.admin-sidebar,
+.admin-main {
+  scrollbar-width: thin;
+  scrollbar-color: var(--admin-border-strong) transparent;
+}
+
+.admin-sidebar::-webkit-scrollbar,
+.admin-main::-webkit-scrollbar {
+  width: 6px;
+}
+
+.admin-sidebar::-webkit-scrollbar-track,
+.admin-main::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.admin-sidebar::-webkit-scrollbar-thumb,
+.admin-main::-webkit-scrollbar-thumb {
+  background: var(--admin-border-strong);
+  border-radius: 4px;
 }
 
 .admin-sidebar-logo {
@@ -159,12 +177,13 @@
 
 /* ── MAIN ── */
 .admin-main {
-  margin-left: var(--sidebar-w);
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100%;
+  overflow-y: auto;
   min-width: 0;
+  margin-left: 0;
 }
 
 /* ── TOPBAR ── */
@@ -178,7 +197,8 @@
   padding: 0 24px;
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 50;
+  flex-shrink: 0;
   gap: 12px;
   transition: background-color 0.22s ease, border-color 0.22s ease;
 }
@@ -573,7 +593,7 @@ input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; accent-colo
 .sidebar-backdrop {
   display: none;
   position: fixed; inset: 0; background: rgba(0,0,0,0.6);
-  z-index: 190;
+  z-index: 240;
 }
 
 /* ── RESPONSIVE ── */
@@ -583,7 +603,20 @@ input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; accent-colo
 }
 
 @media (max-width: 768px) {
-  .admin-sidebar { transform: translateX(-100%); }
+  .admin-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    height: 100dvh;
+    z-index: 250;
+    transform: translateX(-100%);
+  }
+  .portfolio-content .admin-sidebar {
+    top: var(--nav-height);
+    height: calc(100vh - var(--nav-height));
+    height: calc(100dvh - var(--nav-height));
+  }
   .admin-sidebar.open { transform: translateX(0); box-shadow: 4px 0 24px rgba(0,0,0,0.5); }
   .sidebar-backdrop.open { display: block; }
   .sidebar-toggle { display: block; }
