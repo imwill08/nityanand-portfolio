@@ -17,7 +17,7 @@ const SkillCard: React.FC<SkillCardProps> = ({ logo, text }) => {
 
     return (
         <div className="skill-card-item">
-            <div className="skill-card-icon-wrap">
+            {/* <div className="skill-card-icon-wrap">
                 {imageError || !logo ? (
                     <div className="skill-card-fallback">
                         {text.charAt(0).toUpperCase()}
@@ -30,7 +30,7 @@ const SkillCard: React.FC<SkillCardProps> = ({ logo, text }) => {
                         onError={() => setImageError(true)}
                     />
                 )}
-            </div>
+            </div> */}
             <span className="skill-card-name">{text}</span>
 
             <style>{`

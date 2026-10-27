@@ -136,15 +136,15 @@ export default function TimelinePage() {
                     {/* Glowing Temporal Conduit Spine with Scroll-Driven Light Beam */}
                     <div className="timeline-spine-conduit" aria-hidden="true">
                         <div className="timeline-spine-track" />
-                        
+
                         {/* Illuminated trail traveled so far */}
-                        <div 
+                        <div
                             className="timeline-spine-active-trail"
                             style={{ height: `${beamProgress * 100}%` }}
                         />
 
                         {/* Real-time Scroll-Driven Light Beam */}
-                        <div 
+                        <div
                             className="timeline-scroll-beam"
                             style={{ top: `${beamProgress * 100}%` }}
                         >
@@ -185,7 +185,7 @@ export default function TimelinePage() {
 
                                         {/* Center node & company logo */}
                                         <div className="timeline-node-wrapper">
-                                            <div className={`timeline-logo ${era.isLive ? "is-live" : ""}`}>
+                                            {/* <div className={`timeline-logo ${era.isLive ? "is-live" : ""}`}>
                                                 {entry.logo_path ? (
                                                     <img
                                                         src={entry.logo_path.startsWith('http') || entry.logo_path.startsWith('blob:') ? entry.logo_path : `${(process.env.NEXT_PUBLIC_API_BASE_URL || '').replace(/\/+$/, '')}/static${entry.logo_path.startsWith('/') ? '' : '/'}${entry.logo_path}`}
@@ -194,7 +194,7 @@ export default function TimelinePage() {
                                                 ) : (
                                                     <span>{(entry.header ?? "·").charAt(0)}</span>
                                                 )}
-                                            </div>
+                                            </div>  */}
                                             {/* Glowing node connector */}
                                             <span className={`timeline-connector-ring ${era.isLive ? "ring-live" : ""}`} />
                                         </div>
